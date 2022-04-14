@@ -75,8 +75,7 @@ defmodule Cldr.Plug.MixProject do
 
   defp deps do
     [
-      # {:ex_cldr, "~> 2.29"},
-      {:ex_cldr, path: "../cldr_2.29"},
+      {:ex_cldr, "~> 2.28"},
 
       {:ex_doc, "~> 0.18", only: [:dev, :test, :release], runtime: false},
       {:gettext, "~> 0.19", optional: true},

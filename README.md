@@ -15,6 +15,7 @@
   * `accept-language` header
   * Hostname suffix
   * the `session`
+  * An `{Module, function, [args]}` or `{Module, function}` tuple that should return `{:ok, Cldr.LanguageTag.t()}` - any other return will not set the locale.
 
 See `Cldr.Plug.SetLocale` for a description of how to configure the plug.
 

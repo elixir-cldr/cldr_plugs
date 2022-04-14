@@ -72,6 +72,62 @@ defmodule Cldr.Plug.SetLocale.Test do
            ]
   end
 
+  test "init allows an MFA as the default locale" do
+    opts = Cldr.Plug.SetLocale.init(apps: [:cldr, :gettext], cldr: TestBackend.Cldr, default: {Mymodule, :my_function})
+    assert opts == [
+      session_key: "cldr_locale",
+      default: {Mymodule, :my_function, []},
+      gettext: TestGettext.Gettext,
+      cldr: TestBackend.Cldr,
+      param: "locale",
+      from: [:session, :accept_language, :query, :path],
+      apps: [cldr: :global, gettext: :global]
+    ]
+
+    opts = Cldr.Plug.SetLocale.init(apps: [:cldr, :gettext], cldr: TestBackend.Cldr, default: {Mymodule, :my_function, [:arg1]})
+    assert opts == [
+      session_key: "cldr_locale",
+      default: {Mymodule, :my_function, [:arg1]},
+      gettext: TestGettext.Gettext,
+      cldr: TestBackend.Cldr,
+      param: "locale",
+      from: [:session, :accept_language, :query, :path],
+      apps: [cldr: :global, gettext: :global]
+    ]
+  end
+
+  test "init allows a default configured as :none" do
+    opts = Cldr.Plug.SetLocale.init(apps: [:cldr, :gettext], cldr: TestBackend.Cldr, default: :none)
+    assert opts == [
+      session_key: "cldr_locale",
+      default: nil,
+      gettext: TestGettext.Gettext,
+      cldr: TestBackend.Cldr,
+      param: "locale",
+      from: [:session, :accept_language, :query, :path],
+      apps: [cldr: :global, gettext: :global]
+    ]
+  end
+
+  test "init allows MFA as a :from option" do
+    opts = Cldr.Plug.SetLocale.init(
+      apps: [:cldr, :gettext],
+      cldr: TestBackend.Cldr,
+      from: [:path, {Mymodule, :my_function, [:arg1]}, :query, {MyModule, :myfunction}],
+      default: :none
+    )
+
+    assert opts == [
+      session_key: "cldr_locale",
+      default: nil,
+      gettext: TestGettext.Gettext,
+      cldr: TestBackend.Cldr,
+      param: "locale",
+      apps: [cldr: :global, gettext: :global],
+      from: [:path, {Mymodule, :my_function, [:arg1]}, :query, {MyModule, :myfunction}]
+    ]
+  end
+
   # On older versions of elixir, the capture_io call raises
   # an exception.
   test "session key deprecation is emitted" do
@@ -353,6 +409,64 @@ defmodule Cldr.Plug.SetLocale.Test do
       |> Cldr.Plug.SetLocale.call(opts)
 
     assert conn.private[:cldr_locale].gettext_locale_name == "en"
+  end
+
+  test "set the locale from an MF" do
+    opts = Cldr.Plug.SetLocale.init(cldr: TestBackend.Cldr, from: [{MyModule, :get_locale}])
+
+    conn =
+      :get
+      |> conn("/")
+      |> Cldr.Plug.SetLocale.call(opts)
+
+    assert conn.private[:cldr_locale] ==
+             %Cldr.LanguageTag{
+               backend: TestBackend.Cldr,
+               canonical_locale_name: "fr",
+               cldr_locale_name: :fr,
+               extensions: %{},
+               gettext_locale_name: nil,
+               language: "fr",
+               locale: %{},
+               private_use: [],
+               rbnf_locale_name: :fr,
+               requested_locale_name: "fr",
+               script: :Latn,
+               territory: :FR,
+               transform: %{},
+               language_variants: []
+             }
+
+    assert Cldr.get_locale() == conn.private[:cldr_locale]
+  end
+
+  test "set the locale from an MFA" do
+    opts = Cldr.Plug.SetLocale.init(cldr: TestBackend.Cldr, from: [{MyModule, :get_locale, [:fred]}])
+
+    conn =
+      :get
+      |> conn("/")
+      |> Cldr.Plug.SetLocale.call(opts)
+
+    assert conn.private[:cldr_locale] ==
+             %Cldr.LanguageTag{
+               backend: TestBackend.Cldr,
+               canonical_locale_name: "fr",
+               cldr_locale_name: :fr,
+               extensions: %{},
+               gettext_locale_name: nil,
+               language: "fr",
+               locale: %{},
+               private_use: [],
+               rbnf_locale_name: :fr,
+               requested_locale_name: "fr",
+               script: :Latn,
+               territory: :FR,
+               transform: %{},
+               language_variants: []
+             }
+
+    assert Cldr.get_locale() == conn.private[:cldr_locale]
   end
 
   test "that a gettext locale is set on the global gettext context" do
