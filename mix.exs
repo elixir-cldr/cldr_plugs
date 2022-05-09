@@ -5,7 +5,7 @@ defmodule Cldr.Plug.MixProject do
 
   def project do
     [
-      app: :ex_cldr_plug,
+      app: :ex_cldr_plugs,
       version: @version,
       elixir: "~> 1.10",
       compilers: Mix.compilers(),
@@ -21,8 +21,7 @@ defmodule Cldr.Plug.MixProject do
       package: package(),
       dialyzer: [
         ignore_warnings: ".dialyzer_ignore_warnings",
-        plt_add_apps:
-          ~w()
+        plt_add_apps: ~w(gettext)a
       ]
     ]
   end
@@ -75,8 +74,7 @@ defmodule Cldr.Plug.MixProject do
 
   defp deps do
     [
-      {:ex_cldr, "~> 2.28"},
-
+      {:ex_cldr, "~> 2.29"},
       {:ex_doc, "~> 0.18", only: [:dev, :test, :release], runtime: false},
       {:gettext, "~> 0.19", optional: true},
       {:jason, "~> 1.0", optional: true},
