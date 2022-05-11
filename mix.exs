@@ -12,7 +12,7 @@ defmodule Cldr.Plug.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       name: "Cldr Plug",
       description: description(),
-      source_url: "https://github.com/elixir-cldr/cldr_plug",
+      source_url: "https://github.com/elixir-cldr/cldr_plugs",
       docs: docs(),
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
@@ -66,9 +66,9 @@ defmodule Cldr.Plug.MixProject do
 
   def links do
     %{
-      "GitHub" => "https://github.com/elixir-cldr/cldr_plug",
-      "Readme" => "https://github.com/elixir-cldr/cldr_plug/blob/v#{@version}/README.md",
-      "Changelog" => "https://github.com/elixir-cldr/cldr_plug/blob/v#{@version}/CHANGELOG.md"
+      "GitHub" => "https://github.com/elixir-cldr/cldr_plugs",
+      "Readme" => "https://github.com/elixir-cldr/cldr_plugs/blob/v#{@version}/README.md",
+      "Changelog" => "https://github.com/elixir-cldr/cldr_plugs/blob/v#{@version}/CHANGELOG.md"
     }
   end
 

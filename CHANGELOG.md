@@ -1,8 +1,8 @@
 # Changelog
 
-## Cldr Plug v1.0.0
+## Cldr Plugs v1.0.0
 
-This is the changelog for Cldr Plug v1.0.0 released on May 10th, 2022.  For older changelogs please consult the release tag on [GitHub](https://github.com/elixir-cldr/cldr_plug/tags)
+This is the changelog for Cldr Plugs v1.0.0 released on May 10th, 2022.  For older changelogs please consult the release tag on [GitHub](https://github.com/elixir-cldr/cldr_plugs/tags)
 
 ### Enhancements
 
