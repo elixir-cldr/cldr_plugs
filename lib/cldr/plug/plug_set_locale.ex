@@ -48,7 +48,12 @@ defmodule Cldr.Plug.SetLocale do
       gettext module is specified in the `:apps` configuration.
 
     * `:session_key` - defines the key used to look for the locale
-      in the session.  The default is `locale`.
+      in the session.  The default is `cldr_locale`. This option is
+      deprecated and will be removed in a future release. The session
+      key is being standardised in order to faciliate a simpler integration
+      with [Phoenix LiveView](https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.html)
+      by ensuring that the session key is always under a well known
+      key.
 
   If a locale is found then `conn.private[:cldr_locale]` is also set.
   It can be retrieved with `Cldr.Plug.SetLocale.get_cldr_locale/1`.
@@ -555,7 +560,7 @@ defmodule Cldr.Plug.SetLocale do
   defp validate_session_key(options, session_key) when is_binary(session_key) do
     IO.warn(
       "The :session_key option is deprecated and will be removed in " <>
-        "a future release",
+        "a future release. The session key is being standardised as #{inspect @session_key}",
       []
     )
 
