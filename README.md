@@ -63,10 +63,10 @@ defmodule MyAppWeb.Router do
     plug :accepts, ["html"]
     plug :fetch_session
     plug Cldr.Plug.SetLocale,
-	    apps: [:cldr, :gettext],
-	    from: [:path, :query],
-	    gettext: MyApp.Gettext,
-	    cldr: MyApp.Cldr
+      apps: [:cldr, :gettext],
+      from: [:path, :query],
+      gettext: MyApp.Gettext,
+      cldr: MyApp.Cldr
     plug :fetch_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
