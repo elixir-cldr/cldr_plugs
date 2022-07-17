@@ -9,19 +9,22 @@ if Code.ensure_loaded?(Plug) do
   end
 
   defmodule Cldr.Plug.PutSession do
+    alias Cldr.Plug.SetLocale
+    import Plug.Conn
+
     @moduledoc """
     Puts the CLDR locale name in the session.
 
-    The session
-    key is fixed to be `cldr_locale` in order that downstream
-    functions like those in `liveview` don't have to
-    be passed options.
+    The session key is fixed to be `#{SetLocale.session_key()}`
+    in order that downstream functions like those in `liveview` don't
+    have to be passed options.
 
     ## Examples
 
         # Define a router module that
         # sets the locale for the current process
         # and then also sets it in the session
+
         defmodule MyAppWeb.Router do
           use MyAppWeb, :router
 
@@ -41,9 +44,6 @@ if Code.ensure_loaded?(Plug) do
         end
 
     """
-
-    import Plug.Conn
-    alias Cldr.Plug.SetLocale
 
     @doc false
     def init(_options) do
