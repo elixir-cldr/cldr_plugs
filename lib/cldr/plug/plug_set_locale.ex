@@ -26,7 +26,7 @@ defmodule Cldr.Plug.SetLocale do
       * `:body` will look for a locale by examining `conn.body_params`
       * `:cookie` will look for a locale in the request cookie(s)
       * `:session` will look for a locale in the session
-      * `:assigns` will look for a locale under the key `#{inspect @private_key}.
+      * `:assigns` will look for a locale under the key `#{inspect @private_key}`.
         The key may be populated by a Phoenix router and it is used
         extensively by the [ex_cldr_routes](https://hex.pm/packages/ex_cldr_routes)
         library. Note that any locale set in the `:assigns` represents
