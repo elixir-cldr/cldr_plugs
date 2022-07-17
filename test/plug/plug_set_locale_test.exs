@@ -37,7 +37,7 @@ defmodule Cldr.Plug.SetLocale.Test do
              },
              cldr: TestBackend.Cldr,
              param: "locale",
-             from: [:session, :accept_language, :query, :path],
+             from: [:session, :accept_language, :query, :path, :assigns],
              apps: [cldr: :global]
            ]
   end
@@ -67,7 +67,7 @@ defmodule Cldr.Plug.SetLocale.Test do
              gettext: TestGettext.Gettext,
              cldr: TestBackend.Cldr,
              param: "locale",
-             from: [:session, :accept_language, :query, :path],
+             from: [:session, :accept_language, :query, :path, :assigns],
              apps: [cldr: :global, gettext: :global]
            ]
   end
@@ -80,7 +80,7 @@ defmodule Cldr.Plug.SetLocale.Test do
       gettext: TestGettext.Gettext,
       cldr: TestBackend.Cldr,
       param: "locale",
-      from: [:session, :accept_language, :query, :path],
+      from: [:session, :accept_language, :query, :path, :assigns],
       apps: [cldr: :global, gettext: :global]
     ]
 
@@ -91,7 +91,7 @@ defmodule Cldr.Plug.SetLocale.Test do
       gettext: TestGettext.Gettext,
       cldr: TestBackend.Cldr,
       param: "locale",
-      from: [:session, :accept_language, :query, :path],
+      from: [:session, :accept_language, :query, :path, :assigns],
       apps: [cldr: :global, gettext: :global]
     ]
   end
@@ -104,7 +104,7 @@ defmodule Cldr.Plug.SetLocale.Test do
       gettext: TestGettext.Gettext,
       cldr: TestBackend.Cldr,
       param: "locale",
-      from: [:session, :accept_language, :query, :path],
+      from: [:session, :accept_language, :query, :path, :assigns],
       apps: [cldr: :global, gettext: :global]
     ]
   end
@@ -166,7 +166,7 @@ defmodule Cldr.Plug.SetLocale.Test do
              },
              cldr: WithNoGettextBackend.Cldr,
              param: "locale",
-             from: [:session, :accept_language, :query, :path],
+             from: [:session, :accept_language, :query, :path, :assigns],
              apps: [cldr: :global, gettext: :global]
            ]
   end
@@ -264,34 +264,30 @@ defmodule Cldr.Plug.SetLocale.Test do
     assert Cldr.get_locale() == conn.private[:cldr_locale]
   end
 
-  test "set the locale from the session" do
-    opts = Cldr.Plug.SetLocale.init(from: :session, cldr: TestBackend.Cldr)
-    session_opts = Plug.Session.init(store: :cookie, key: "_key", signing_salt: "X")
+  test "set the locale from assigns" do
+    opts = Cldr.Plug.SetLocale.init(from: :assigns, cldr: TestBackend.Cldr)
 
     conn =
       :get
-      |> conn("/")
-      |> Plug.Session.call(session_opts)
-      |> fetch_session("cldr_locale")
-      |> put_session("cldr_locale", Cldr.Locale.new!("ru", opts[:cldr]))
-      |> Cldr.Plug.SetLocale.call(opts)
+      |> conn("/hello")
+      |> MyRouter.call(opts)
 
     assert conn.private[:cldr_locale] ==
              %Cldr.LanguageTag{
                backend: TestBackend.Cldr,
+               canonical_locale_name: "fr-FR",
+               cldr_locale_name: :fr,
                extensions: %{},
                gettext_locale_name: nil,
+               language: "fr",
                locale: %{},
                private_use: [],
+               rbnf_locale_name: :fr,
+               requested_locale_name: "fr-FR",
+               script: :Latn,
+               territory: :FR,
                transform: %{},
-               language_variants: [],
-               canonical_locale_name: "ru",
-               cldr_locale_name: :ru,
-               language: "ru",
-               rbnf_locale_name: :ru,
-               requested_locale_name: "ru",
-               script: :Cyrl,
-               territory: :RU
+               language_variants: []
              }
 
     assert Cldr.get_locale() == conn.private[:cldr_locale]

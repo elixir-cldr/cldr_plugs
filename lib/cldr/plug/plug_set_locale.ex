@@ -1,4 +1,11 @@
 defmodule Cldr.Plug.SetLocale do
+  @private_key :cldr_locale
+  @session_key "cldr_locale"
+
+  @default_apps [cldr: :global]
+  @default_from [:session, :accept_language, :query, :path, :assigns]
+  @default_param_name "locale"
+
   @moduledoc """
   Sets the Cldr and/or Gettext locales derived from the accept-language
   header, a query parameter, a url parameter, a body parameter or the
@@ -10,7 +17,7 @@ defmodule Cldr.Plug.SetLocale do
       See the apps configuration section.
 
     * `:from` - where in the request to look for the locale.
-      The default is `[:session, :accept_language, :query, :path]`. The valid
+      The default is `#{inspect @default_from}`. The valid
       options are:
       * `:accept_language` will parse the `accept-language` header
          and finds the best matched configured locale
@@ -19,6 +26,14 @@ defmodule Cldr.Plug.SetLocale do
       * `:body` will look for a locale by examining `conn.body_params`
       * `:cookie` will look for a locale in the request cookie(s)
       * `:session` will look for a locale in the session
+      * `:assigns` will look for a locale under the key `#{inspect @private_key}.
+        The key may be populated by a Phoenix router and it is used
+        extensively by the [ex_cldr_routes](https://hex.pm/packages/ex_cldr_routes)
+        library. Note that any locale set in the `:assigns` represents
+        the locale defined for the route, not necessarily one requested
+        by the user. Therefore setting the locale from the `:assigns` key
+        should be a lower priority than other methods based on the actual
+        request.
       * `:host` will attempt to resolve a locale from the host name top-level
         domain using `Cldr.Locale.locale_from_host/3`
       * `{Module, function, args}` in which case the indicated function will
@@ -171,14 +186,7 @@ defmodule Cldr.Plug.SetLocale do
   require Logger
   alias Cldr.AcceptLanguage
 
-  @default_apps [cldr: :global]
-  @default_from [:session, :accept_language, :query, :path]
-  @default_param_name "locale"
-
-  @private_key :cldr_locale
-  @session_key "cldr_locale"
-
-  @from_options [:accept_language, :path, :body, :query, :session, :cookie, :host]
+  @from_options [:accept_language, :path, :body, :query, :session, :cookie, :host, :assigns]
   @app_options [:cldr, :gettext]
 
   @language_header "accept-language"
@@ -314,6 +322,14 @@ defmodule Cldr.Plug.SetLocale do
     |> Map.get(:host)
     |> Cldr.Locale.locale_from_host(options[:cldr])
   end
+
+  defp fetch_param(conn, :assigns, _param, options) do
+    conn
+    |> Map.fetch!(:assigns)
+    |> Map.get(@private_key)
+    |> Cldr.validate_locale(options[:cldr])
+  end
+
 
   defp fetch_param(conn, {module, function, args}, _param, options) do
     apply(module, function, [conn, options | args])

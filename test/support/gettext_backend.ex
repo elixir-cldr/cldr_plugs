@@ -4,6 +4,6 @@ defmodule TestGettext.Gettext do
   testing only.
   """
   use Gettext,
-    otp_app: :ex_cldr_plug,
+    otp_app: :ex_cldr_plugs,
     priv: "priv/gettext_test"
 end
