@@ -339,18 +339,14 @@ defmodule Cldr.Plug.SetLocale do
     apply(module, function, [conn, options])
   end
 
-  defp return_if_valid_locale(nil) do
-    {:cont, nil}
-  end
-
-  defp return_if_valid_locale({:error, _}) do
-    {:cont, nil}
-  end
-
   defp return_if_valid_locale({:ok, locale}) do
     {:halt, locale}
   end
 
+  defp return_if_valid_locale(_) do
+    {:cont, nil}
+  end
+  
   defp put_locale({:cldr, :global}, locale, _options) do
     Cldr.put_locale(locale)
   end
