@@ -1,5 +1,13 @@
 # Changelog
 
+## Cldr Plugs v1.2.0
+
+This is the changelog for Cldr Plugs v1.2.0 released on _______, 2022.  For older changelogs please consult the release tag on [GitHub](https://github.com/elixir-cldr/cldr_plugs/tags)
+
+### Bug Fixes
+
+* Fix setting the locale from the result returned from an `{M, f}` or `{M, f, [a]}`. Thanks to @rubas for the PR>
+
 ## Cldr Plugs v1.1.0
 
 This is the changelog for Cldr Plugs v1.1.0 released on July 17th, 2022.  For older changelogs please consult the release tag on [GitHub](https://github.com/elixir-cldr/cldr_plugs/tags)
