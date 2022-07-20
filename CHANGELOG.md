@@ -6,7 +6,9 @@ This is the changelog for Cldr Plugs v1.2.0 released on _______, 2022.  For olde
 
 ### Bug Fixes
 
-* Fix setting the locale from the result returned from an `{M, f}` or `{M, f, [a]}`. Thanks to @rubas for the PR>
+* Fix setting the locale from the result returned from an `{M, f}` or `{M, f, [a]}`. Thanks to @rubas for the PR.
+
+* Don't make modules `Cldr.Plug.AcceptLanguage` and `Cldr.Plug.PutSession` dependent on `Plug`, `Plug` is a required dependency since this library was split from `ex_cldr`. Thanks to @linusdm for the report. Closes #1.
 
 ## Cldr Plugs v1.1.0
 

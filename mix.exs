@@ -60,7 +60,8 @@ defmodule Cldr.Plug.MixProject do
       main: "readme",
       extras: ["README.md", "CHANGELOG.md", "LICENSE.md"],
       logo: "logo.png",
-      skip_undefined_reference_warnings_on: ["changelog", "CHANGELOG.md"]
+      skip_undefined_reference_warnings_on: ["changelog", "CHANGELOG.md"],
+      formatters: ["html"]
     ]
   end
 
