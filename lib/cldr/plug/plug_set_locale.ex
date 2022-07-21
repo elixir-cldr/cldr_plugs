@@ -3,7 +3,7 @@ defmodule Cldr.Plug.SetLocale do
   @session_key "cldr_locale"
 
   @default_apps [cldr: :global]
-  @default_from [:session, :accept_language, :query, :path, :assigns]
+  @default_from [:session, :accept_language, :query, :path, :route]
   @default_param_name "locale"
 
   @moduledoc """
@@ -26,12 +26,13 @@ defmodule Cldr.Plug.SetLocale do
       * `:body` will look for a locale by examining `conn.body_params`
       * `:cookie` will look for a locale in the request cookie(s)
       * `:session` will look for a locale in the session
-      * `:assigns` will look for a locale under the key `#{inspect @private_key}`.
+      * `:route` will look for a locale in the route that was
+        matched under the key `private.#{inspect @private_key}`.
         The key may be populated by a Phoenix router and it is used
         extensively by the [ex_cldr_routes](https://hex.pm/packages/ex_cldr_routes)
-        library. Note that any locale set in the `:assigns` represents
+        library. Note that any locale set in the route represents
         the locale defined for the route, not necessarily one requested
-        by the user. Therefore setting the locale from the `:assigns` key
+        by the user. Therefore setting the locale from the `:route` key
         should be a lower priority than other methods based on the actual
         request.
       * `:host` will attempt to resolve a locale from the host name top-level
@@ -186,7 +187,7 @@ defmodule Cldr.Plug.SetLocale do
   require Logger
   alias Cldr.AcceptLanguage
 
-  @from_options [:accept_language, :path, :body, :query, :session, :cookie, :host, :assigns]
+  @from_options [:accept_language, :path, :body, :query, :session, :cookie, :host, :assigns, :route]
   @app_options [:cldr, :gettext]
 
   @language_header "accept-language"
@@ -323,13 +324,16 @@ defmodule Cldr.Plug.SetLocale do
     |> Cldr.Locale.locale_from_host(options[:cldr])
   end
 
-  defp fetch_param(conn, :assigns, _param, options) do
+  defp fetch_param(conn, :route, _param, options) do
     conn
-    |> Map.fetch!(:assigns)
+    |> Map.fetch!(:private)
     |> Map.get(@private_key)
     |> Cldr.validate_locale(options[:cldr])
   end
 
+  defp fetch_param(conn, :assigns, param, options) do
+    fetch_param(conn, :route, param, options)
+  end
 
   defp fetch_param(conn, {module, function, args}, _param, options) do
     apply(module, function, [conn, options | args])
@@ -346,7 +350,7 @@ defmodule Cldr.Plug.SetLocale do
   defp return_if_valid_locale(_) do
     {:cont, nil}
   end
-  
+
   defp put_locale({:cldr, :global}, locale, _options) do
     Cldr.put_locale(locale)
   end
@@ -484,6 +488,11 @@ defmodule Cldr.Plug.SetLocale do
       "Invalid :from list #{inspect(from)} detected.  " <>
         "Valid from options are #{inspect(@from_options)}"
     )
+  end
+
+  defp invalid_from?(:assigns) do
+    IO.warn "The :from option `:assigns` is deprecated and should be replaced with `:route`", []
+    false
   end
 
   defp invalid_from?(from) when from in @from_options do

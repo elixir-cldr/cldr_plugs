@@ -11,7 +11,7 @@ defmodule MyRouter do
 
   plug(Cldr.Plug.SetLocale,
     apps: [:cldr, :gettext],
-    from: [:path, :query, :assigns],
+    from: [:path, :query, :route],
     gettext: TestGettext.Gettext,
     cldr: TestBackend.Cldr
   )
@@ -24,7 +24,7 @@ defmodule MyRouter do
     send_resp(conn, 200, "world")
   end
 
-  get "/hello", assigns: %{cldr_locale: "fr-FR"} do
+  get "/hello", private: %{cldr_locale: "fr-FR"} do
     send_resp(conn, 200, "world")
   end
 

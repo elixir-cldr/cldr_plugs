@@ -37,7 +37,7 @@ defmodule Cldr.Plug.SetLocale.Test do
              },
              cldr: TestBackend.Cldr,
              param: "locale",
-             from: [:session, :accept_language, :query, :path, :assigns],
+             from: [:session, :accept_language, :query, :path, :route],
              apps: [cldr: :global]
            ]
   end
@@ -67,7 +67,7 @@ defmodule Cldr.Plug.SetLocale.Test do
              gettext: TestGettext.Gettext,
              cldr: TestBackend.Cldr,
              param: "locale",
-             from: [:session, :accept_language, :query, :path, :assigns],
+             from: [:session, :accept_language, :query, :path, :route],
              apps: [cldr: :global, gettext: :global]
            ]
   end
@@ -80,7 +80,7 @@ defmodule Cldr.Plug.SetLocale.Test do
       gettext: TestGettext.Gettext,
       cldr: TestBackend.Cldr,
       param: "locale",
-      from: [:session, :accept_language, :query, :path, :assigns],
+      from: [:session, :accept_language, :query, :path, :route],
       apps: [cldr: :global, gettext: :global]
     ]
 
@@ -91,7 +91,7 @@ defmodule Cldr.Plug.SetLocale.Test do
       gettext: TestGettext.Gettext,
       cldr: TestBackend.Cldr,
       param: "locale",
-      from: [:session, :accept_language, :query, :path, :assigns],
+      from: [:session, :accept_language, :query, :path, :route],
       apps: [cldr: :global, gettext: :global]
     ]
   end
@@ -104,7 +104,7 @@ defmodule Cldr.Plug.SetLocale.Test do
       gettext: TestGettext.Gettext,
       cldr: TestBackend.Cldr,
       param: "locale",
-      from: [:session, :accept_language, :query, :path, :assigns],
+      from: [:session, :accept_language, :query, :path, :route],
       apps: [cldr: :global, gettext: :global]
     ]
   end
@@ -166,7 +166,7 @@ defmodule Cldr.Plug.SetLocale.Test do
              },
              cldr: WithNoGettextBackend.Cldr,
              param: "locale",
-             from: [:session, :accept_language, :query, :path, :assigns],
+             from: [:session, :accept_language, :query, :path, :route],
              apps: [cldr: :global, gettext: :global]
            ]
   end
@@ -265,7 +265,7 @@ defmodule Cldr.Plug.SetLocale.Test do
   end
 
   test "set the locale from assigns" do
-    opts = Cldr.Plug.SetLocale.init(from: :assigns, cldr: TestBackend.Cldr)
+    opts = Cldr.Plug.SetLocale.init(from: :route, cldr: TestBackend.Cldr)
 
     conn =
       :get
