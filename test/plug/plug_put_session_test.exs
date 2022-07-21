@@ -8,7 +8,7 @@ defmodule Cldr.Plug.SetSession.Test do
     conn = conn(:get, "/hello/es", %{this: "thing"})
     conn = MyRouter.call(conn, MyRouter.init([]))
 
-    assert get_session(conn, Cldr.Plug.SetLocale.session_key()) == "es"
+    assert get_session(conn, Cldr.Plug.SetLocale.session_key()) |> to_string() == "es"
   end
 
   test "that the session is set for complex locale (not a cldr locale name)" do
@@ -17,6 +17,6 @@ defmodule Cldr.Plug.SetSession.Test do
     conn = conn(:get, "/hello/#{locale}", %{this: "thing"})
     conn = MyRouter.call(conn, MyRouter.init([]))
 
-    assert get_session(conn, Cldr.Plug.SetLocale.session_key()) == locale
+    assert get_session(conn, Cldr.Plug.SetLocale.session_key()) |> to_string() == locale
   end
 end

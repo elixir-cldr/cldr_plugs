@@ -12,7 +12,7 @@ defmodule Cldr.Plug.PutSession do
   import Plug.Conn
 
   @moduledoc """
-  Puts the CLDR locale name in the session.
+  Puts the CLDR locale in the session.
 
   The session key is fixed to be `#{PutLocale.session_key()}`
   in order that downstream functions like those in `liveview` don't
@@ -52,7 +52,7 @@ defmodule Cldr.Plug.PutSession do
   @doc false
   def call(conn, _options) do
     case PutLocale.get_cldr_locale(conn) do
-      %Cldr.LanguageTag{canonical_locale_name: cldr_locale} ->
+      %Cldr.LanguageTag{} = cldr_locale ->
         conn
         |> fetch_session()
         |> put_session(PutLocale.session_key(), cldr_locale)

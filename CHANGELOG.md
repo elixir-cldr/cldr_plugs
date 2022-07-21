@@ -4,6 +4,12 @@
 
 This is the changelog for Cldr Plugs v1.2.0 released on _______, 2022.  For older changelogs please consult the release tag on [GitHub](https://github.com/elixir-cldr/cldr_plugs/tags)
 
+### Behaviour Change
+
+* `Cldr.Plug.PutSession` now puts the full `%Cldr.LanguageTag{}` into the session, rather than just the text. The disadvantage is that the size (in bytes) of the locale as stored in the session is larger, at around 400-500 bytes. There are however several benefits:
+  * Limits the number of times the locale name is parsed which improved performance
+  * Easier pattern matching on the session, which is very useful with using the new `Cldr.Session.put_locale/2`
+
 ### Deprecations
 
 * Deprecate `Cldr.Plug.SetLocale` in favour of the more consistent `Cldr.Plug.PutLocale` name.
@@ -15,6 +21,16 @@ This is the changelog for Cldr Plugs v1.2.0 released on _______, 2022.  For olde
 * Fix setting the locale from the result returned from an `{M, f}` or `{M, f, [a]}`. Thanks to @rubas for the PR.
 
 * Don't make modules `Cldr.Plug.AcceptLanguage` and `Cldr.Plug.PutSession` dependent on `Plug`, `Plug` is a required dependency since this library was split from `ex_cldr`. Thanks to @linusdm for the report. Closes #1.
+
+### Enhancements
+
+* Adds `Cldr.Session.put_locale/{1, 2}` that takes the locale from the session (if there is one) and puts the Cldr locale and/or the Gettext locale into the current process.  This is very useful to add to the `on_mount` callback in LiveView but it can be applied at any time the session is available. For example:
+```elixir
+def on_mount(:default, _params, session, socket) do
+  {:ok, locale} = Cldr.Session.put_locale(session)
+  ....
+end
+```
 
 ## Cldr Plugs v1.1.0
 
