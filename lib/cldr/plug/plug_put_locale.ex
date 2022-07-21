@@ -1,4 +1,17 @@
 defmodule Cldr.Plug.SetLocale do
+  @moduledoc false
+
+  @deprecated "Please use Cldr.Plug.PutLocale"
+  defdelegate init(options), to: Cldr.Plug.PutLocale
+
+  defdelegate call(conn, options), to: Cldr.Plug.PutLocale
+  defdelegate session_key, to: Cldr.Plug.PutLocale
+  defdelegate private_key, to: Cldr.Plug.PutLocale
+  defdelegate get_cldr_locale(conn), to: Cldr.Plug.PutLocale
+
+end
+
+defmodule Cldr.Plug.PutLocale do
   @private_key :cldr_locale
   @session_key "cldr_locale"
 
@@ -7,9 +20,10 @@ defmodule Cldr.Plug.SetLocale do
   @default_param_name "locale"
 
   @moduledoc """
-  Sets the Cldr and/or Gettext locales derived from the accept-language
-  header, a query parameter, a url parameter, a body parameter or the
-  session.
+  Puts the Cldr and/or Gettext locales derived from the accept-language
+  header, a query parameter, a url parameter, a body parameter, the route
+   or the session for the current process with `Cldr.put_locale/2` and/or
+  `Gettext.put_locale/2`.
 
   ## Options
 
@@ -72,14 +86,14 @@ defmodule Cldr.Plug.SetLocale do
       key.
 
   If a locale is found then `conn.private[:cldr_locale]` is also set.
-  It can be retrieved with `Cldr.Plug.SetLocale.get_cldr_locale/1`.
+  It can be retrieved with `Cldr.Plug.PutLocale.get_cldr_locale/1`.
 
   ## App configuration
 
   The `:apps` configuration key defines which applications will have
   their locale *set* by this plug.
 
-  `Cldr.Plug.SetLocale` can set the locale for `cldr`, `gettext` or both.
+  `Cldr.Plug.PutLocale` can set the locale for `cldr`, `gettext` or both.
   The basic configuration of the `:app` key is an atom, or list of atoms,
   containing one or both of these app names.  For example:
 
@@ -100,11 +114,11 @@ defmodule Cldr.Plug.SetLocale do
       apps: [gettext: :global]
       apps: [cldr: MyApp.Cldr, gettext: MyAppGettext]
 
-  ## Using Cldr.Plug.SetLocale without Phoenix
+  ## Using Cldr.Plug.PutLocale without Phoenix
 
-  If you are using `Cldr.Plug.SetLocale` without Phoenix and you
+  If you are using `Cldr.Plug.PutLocale` without Phoenix and you
   plan to use `:path_param` to identify the locale of a request
-  then `Cldr.Plug.SetLocale` must be configured *after* `plug :match`
+  then `Cldr.Plug.PutLocale` must be configured *after* `plug :match`
   and *before* `plug :dispatch`.  For example:
 
       defmodule MyRouter do
@@ -112,7 +126,7 @@ defmodule Cldr.Plug.SetLocale do
 
         plug :match
 
-        plug Cldr.Plug.SetLocale,
+        plug Cldr.Plug.PutLocale,
           apps: [:cldr, :gettext],
           from: [:path, :query],
           gettext: MyApp.Gettext,
@@ -125,11 +139,11 @@ defmodule Cldr.Plug.SetLocale do
         end
       end
 
-  ## Using Cldr.Plug.SetLocale with Phoenix
+  ## Using Cldr.Plug.PutLocale with Phoenix
 
-  If you are using `Cldr.Plug.SetLocale` with Phoenix and you plan
+  If you are using `Cldr.Plug.PutLocale` with Phoenix and you plan
   to use the `:path_param` to identify the locale of a request then
-  `Cldr.Plug.SetLocale` must be configured in the router module, *not*
+  `Cldr.Plug.PutLocale` must be configured in the router module, *not*
   in the endpoint module. This is because `conn.path_params` has
   not yet been populated in the endpoint. For example:
 
@@ -139,7 +153,7 @@ defmodule Cldr.Plug.SetLocale do
         pipeline :browser do
           plug :accepts, ["html"]
           plug :fetch_session
-          plug Cldr.Plug.SetLocale,
+          plug Cldr.Plug.PutLocale,
       	    apps: [:cldr, :gettext],
       	    from: [:path, :query],
       	    gettext: MyApp.Gettext,
@@ -160,7 +174,7 @@ defmodule Cldr.Plug.SetLocale do
 
       # Will set the global locale for the current process
       # for both `:cldr` and `:gettext`
-      plug Cldr.Plug.SetLocale,
+      plug Cldr.Plug.PutLocale,
         apps:    [:cldr, :gettext],
         from:    [:query, :path, :body, :cookie, :accept_language],
         param:   "locale",
@@ -169,14 +183,14 @@ defmodule Cldr.Plug.SetLocale do
 
       # Will set the backend-only locale for the current process
       # for both `:cldr` and `:gettext`
-      plug Cldr.Plug.SetLocale,
+      plug Cldr.Plug.PutLocale,
         apps:    [cldr: MyApp.Cldr, gettext: GetTextModule],
         from:    [:query, :path, :body, :cookie, :accept_language],
         param:   "locale"
 
       # Will set the backend-only locale for the current process
       # for `:cldr` and globally for `:gettext`
-      plug Cldr.Plug.SetLocale,
+      plug Cldr.Plug.PutLocale,
         apps:    [cldr: MyApp.Cldr, gettext: :global],
         from:    [:query, :path, :body, :cookie, :accept_language],
         param:   "locale"
@@ -237,7 +251,7 @@ defmodule Cldr.Plug.SetLocale do
 
   ## Example
 
-    iex> Cldr.Plug.SetLocale.session_key()
+    iex> Cldr.Plug.PutLocale.session_key()
     "cldr_locale"
 
   """
@@ -251,7 +265,7 @@ defmodule Cldr.Plug.SetLocale do
   end
 
   @doc """
-  Return the locale set by `Cldr.Plug.SetLocale`
+  Return the locale set by `Cldr.Plug.PutLocale`
 
   """
   def get_cldr_locale(conn) do

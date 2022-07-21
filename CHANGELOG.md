@@ -4,6 +4,12 @@
 
 This is the changelog for Cldr Plugs v1.2.0 released on _______, 2022.  For older changelogs please consult the release tag on [GitHub](https://github.com/elixir-cldr/cldr_plugs/tags)
 
+### Deprecations
+
+* Deprecate `Cldr.Plug.SetLocale` in favour of the more consistent `Cldr.Plug.PutLocale` name.
+
+* Deprecate the `:assigns` `from` key in favour of they key `:route`. `Cldr.Route` will, as of version 0.5.0, place the locale in the `conn.private.cldr_locale` location.  `from: :route` better reflects the intent.  The `:assigns` keyword remains valid with a deprecation warning. 
+
 ### Bug Fixes
 
 * Fix setting the locale from the result returned from an `{M, f}` or `{M, f, [a]}`. Thanks to @rubas for the PR.
