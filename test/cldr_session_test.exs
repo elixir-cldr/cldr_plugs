@@ -13,14 +13,14 @@ defmodule Cldr.Session.Test do
 
     assert %Cldr.LanguageTag{} = locale
 
-    assert {:ok, _locale} = Cldr.Session.put_locale(session)
-    assert {:ok, _locale} = Cldr.Session.put_locale(session, [:cldr])
-    assert {:ok, _locale} = Cldr.Session.put_locale(session, [:cldr, :gettext])
+    assert {:ok, _locale} = Cldr.Plug.put_locale_from_session(session)
+    assert {:ok, _locale} = Cldr.Plug.put_locale_from_session(session, [:cldr])
+    assert {:ok, _locale} = Cldr.Plug.put_locale_from_session(session, [:cldr, :gettext])
 
     assert locale == Cldr.get_locale()
 
-    assert_raise ArgumentError, ~r/Invalid application passed to Cldr.Session.put_locale.*/, fn ->
-      Cldr.Session.put_locale(session, [:invalid])
+    assert_raise ArgumentError, ~r/Invalid application passed to Cldr.Plug.put_locale_from_session.*/, fn ->
+      Cldr.Plug.put_locale_from_session(session, [:invalid])
     end
   end
 end

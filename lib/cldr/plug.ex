@@ -1,4 +1,4 @@
-defmodule Cldr.Session do
+defmodule Cldr.Plug do
   @moduledoc """
   Functions to support setting the locale
   for Cldr and/or Gettext from the session.
@@ -11,7 +11,7 @@ defmodule Cldr.Session do
   @session_key Cldr.Plug.PutLocale.session_key()
 
   @doc """
-  Puts the locale from the session inot the current
+  Puts the locale from the session into the current
   process for `C;dr` and/or `Gettext`,
 
   This function is useful to place in the `on_mount`
@@ -36,22 +36,22 @@ defmodule Cldr.Session do
 
   ## Example
 
-      => Cldr.Session.put_locale(session)
-      => Cldr.Session.put_locale(session, [:cldr])
-      => Cldr.Session.put_locale(session, [:cldr, :gettext])
+      => Cldr.Plug.put_locale_from_session(session)
+      => Cldr.Plug.put_locale_from_session(session, [:cldr])
+      => Cldr.Plug.put_locale_from_session(session, [:cldr, :gettext])
 
       # In a LiveView
       def on_mount(:default, _params, session, socket) do
-        {:ok, locale} = Cldr.Session.put_locale(session)
+        {:ok, locale} = Cldr.Plug.put_locale_from_session(session)
       end
 
   """
-  @spec put_locale(Cldr.LanguageTag.t(), applications) ::
+  @spec put_locale_from_session(Cldr.LanguageTag.t(), applications) ::
     {:ok, Cldr.LanguageTag.t()} | {:error, {module(), String.t()}}
 
-  def put_locale(locale, applications \\ [:cldr, :gettext])
+  def put_locale_from_session(locale, applications \\ [:cldr, :gettext])
 
-  def put_locale(%{@session_key => locale}, applications) do
+  def put_locale_from_session(%{@session_key => locale}, applications) do
     with {:ok, locale} <- Cldr.validate_locale(locale) do
       Enum.reduce_while(applications, nil, fn
         :cldr, _acc ->
@@ -63,18 +63,18 @@ defmodule Cldr.Session do
             Gettext.put_locale(gettext_backend, locale.gettext_locale_name)
             {:cont, {:ok, locale}}
           else
-            {:halt, {:error, {Cldr.UnknownLocaleError, "No gettext locale set for #{inspect locale}"}}}
+            {:halt, {:error, {Cldr.UnknownLocaleError, "No gettext locale defined for #{inspect locale}"}}}
           end
 
         other, _acc ->
           raise ArgumentError,
-            "Invalid application passed to Cldr.Session.put_locale/2. " <>
+            "Invalid application passed to Cldr.Plug.put_locale_from_session/2. " <>
             "Valid applications are :cldr and :gettext. Found #{inspect other}"
       end)
     end
   end
 
-  def put_locale(_session, _options) do
+  def put_locale_from_session(_session, _options) do
     {:error, {Cldr.UnknownLocaleError, "No locale was found in the session"}}
   end
 end
