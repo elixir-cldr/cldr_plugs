@@ -4,12 +4,6 @@
 
 This is the changelog for Cldr Plugs v1.2.0 released on _______, 2022.  For older changelogs please consult the release tag on [GitHub](https://github.com/elixir-cldr/cldr_plugs/tags)
 
-### Behaviour Change
-
-* `Cldr.Plug.PutSession` now puts the full `%Cldr.LanguageTag{}` into the session, rather than just the text. The disadvantage is that the size (in bytes) of the locale as stored in the session is larger, at around 400-500 bytes. There are however several benefits:
-  * Limits the number of times the locale name is parsed which improved performance
-  * Easier pattern matching on the session, which is very useful with using the new `Cldr.Session.put_locale/2`
-
 ### Deprecations
 
 * Deprecate `Cldr.Plug.SetLocale` in favour of the more consistent `Cldr.Plug.PutLocale` name.
@@ -31,6 +25,8 @@ def on_mount(:default, _params, session, socket) do
   ....
 end
 ```
+
+* `Cldr.Plug.PutSession` now has the option to store the full `%Cldr.LanguageTag{}` into the session, or just the string representation (which the default and the same as previous releases). The tradeoff is space used the session (less than 10 bytes typically for the string, around 500 bytes for the struct) versus the performance hit serializing and parsing the locale when storing it in the session or retrieving it later on.
 
 ## Cldr Plugs v1.1.0
 
