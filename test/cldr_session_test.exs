@@ -1,4 +1,4 @@
-defmodule Cldr.Session.Test do
+defmodule Cldr.Plug.Test do
   use ExUnit.Case, async: true
   use Plug.Test
 
