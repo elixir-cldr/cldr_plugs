@@ -12,7 +12,7 @@ defmodule Cldr.Plug do
 
   @doc """
   Puts the locale from the session into the current
-  process for `C;dr` and/or `Gettext`,
+  process for `Cldr` and/or `Gettext`.
 
   This function is useful to place in the `on_mount`
   callback for a LiveView.
@@ -21,7 +21,7 @@ defmodule Cldr.Plug do
 
   * `session` is any map, typically the map returned
     as part of the `conn` of a Phoenix or Plug request,
-    A `session` is passed as the first parameter to the
+    A `session` is passed as the third parameter to the
     `on_mount` callback of a LiveView request.
 
   * `applications` is a list of applications for which

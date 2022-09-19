@@ -18,10 +18,10 @@ This is the changelog for Cldr Plugs v1.2.0 released on July 27th, 2022.  For ol
 
 ### Enhancements
 
-* Adds `Cldr.Session.put_locale/{1, 2}` that takes the locale from the session (if there is one) and puts the Cldr locale and/or the Gettext locale into the current process.  This is very useful to add to the `on_mount` callback in LiveView but it can be applied at any time the session is available. For example:
+* Adds `Cldr.Plug.put_locale_from_session/2` that takes the locale from the session (if there is one) and puts the Cldr locale and/or the Gettext locale into the current process.  This is very useful to add to the `on_mount` callback in LiveView but it can be applied at any time the session is available. For example:
 ```elixir
 def on_mount(:default, _params, session, socket) do
-  {:ok, locale} = Cldr.Session.put_locale(session)
+  {:ok, locale} = Cldr.Plug.put_locale_from_session(session)
   ....
 end
 ```
