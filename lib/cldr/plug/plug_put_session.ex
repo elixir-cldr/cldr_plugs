@@ -55,7 +55,7 @@ defmodule Cldr.Plug.PutSession do
         pipeline :browser do
           plug :accepts, ["html"]
           plug :fetch_session
-          plug Cldr.Plug.SetLocale,
+          plug Cldr.Plug.PutLocale,
       	    apps: [:cldr, :gettext],
       	    from: [:path, :query],
       	    gettext: MyApp.Gettext,
