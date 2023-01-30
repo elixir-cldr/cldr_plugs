@@ -77,7 +77,7 @@ defmodule Cldr.Plug.AcceptLanguage do
         nil
 
       {:error, {exception, reason}} ->
-        Logger.warn("#{inspect(exception)}: #{reason}")
+        Logger.warning("#{inspect(exception)}: #{reason}")
         nil
     end
   end
@@ -90,4 +90,3 @@ defmodule Cldr.Plug.AcceptLanguage do
     conn.private[:cldr_locale]
   end
 end
-

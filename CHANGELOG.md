@@ -8,7 +8,9 @@ This is the changelog for Cldr Plugs v1.2.1 released on January 30th, 2023.  For
 
 * Improves logger messages when `Cldr.Plug.PutLocale` is attempting to set the Gettext locale. There are now one of two warnings logged:
   * One when the CLDR backend module has no configured Gettext module
-  * One when there is a configured Gettext module but that module does not have the specified locale configured
+  * One when there is a configured Gettext module but that module does not have the specified locale configured.
+  
+* Changes `Logger.warn/1` to `Logger.warning/1` to avoid deprecation messages on Elixir 1.15
 
 ## Cldr Plugs v1.2.0
 

@@ -47,7 +47,7 @@ defmodule Cldr.Plug do
 
   """
   @spec put_locale_from_session(Cldr.LanguageTag.t(), applications) ::
-    {:ok, Cldr.LanguageTag.t()} | {:error, {module(), String.t()}}
+          {:ok, Cldr.LanguageTag.t()} | {:error, {module(), String.t()}}
 
   def put_locale_from_session(locale, applications \\ [:cldr, :gettext])
 
@@ -63,13 +63,15 @@ defmodule Cldr.Plug do
             Gettext.put_locale(gettext_backend, locale.gettext_locale_name)
             {:cont, {:ok, locale}}
           else
-            {:halt, {:error, {Cldr.UnknownLocaleError, "No gettext locale defined for #{inspect locale}"}}}
+            {:halt,
+             {:error,
+              {Cldr.UnknownLocaleError, "No gettext locale defined for #{inspect(locale)}"}}}
           end
 
         other, _acc ->
           raise ArgumentError,
-            "Invalid application passed to Cldr.Plug.put_locale_from_session/2. " <>
-            "Valid applications are :cldr and :gettext. Found #{inspect other}"
+                "Invalid application passed to Cldr.Plug.put_locale_from_session/2. " <>
+                  "Valid applications are :cldr and :gettext. Found #{inspect(other)}"
       end)
     end
   end

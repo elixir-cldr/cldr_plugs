@@ -74,59 +74,74 @@ defmodule Cldr.Plug.PutLocale.Test do
   end
 
   test "init allows an MFA as the default locale" do
-    opts = Cldr.Plug.PutLocale.init(apps: [:cldr, :gettext], cldr: TestBackend.Cldr, default: {Mymodule, :my_function})
-    assert opts == [
-      session_key: "cldr_locale",
-      default: {Mymodule, :my_function, []},
-      gettext: TestGettext.Gettext,
-      cldr: TestBackend.Cldr,
-      param: "locale",
-      from: [:session, :accept_language, :query, :path, :route],
-      apps: [cldr: :global, gettext: :global]
-    ]
+    opts =
+      Cldr.Plug.PutLocale.init(
+        apps: [:cldr, :gettext],
+        cldr: TestBackend.Cldr,
+        default: {Mymodule, :my_function}
+      )
 
-    opts = Cldr.Plug.PutLocale.init(apps: [:cldr, :gettext], cldr: TestBackend.Cldr, default: {Mymodule, :my_function, [:arg1]})
     assert opts == [
-      session_key: "cldr_locale",
-      default: {Mymodule, :my_function, [:arg1]},
-      gettext: TestGettext.Gettext,
-      cldr: TestBackend.Cldr,
-      param: "locale",
-      from: [:session, :accept_language, :query, :path, :route],
-      apps: [cldr: :global, gettext: :global]
-    ]
+             session_key: "cldr_locale",
+             default: {Mymodule, :my_function, []},
+             gettext: TestGettext.Gettext,
+             cldr: TestBackend.Cldr,
+             param: "locale",
+             from: [:session, :accept_language, :query, :path, :route],
+             apps: [cldr: :global, gettext: :global]
+           ]
+
+    opts =
+      Cldr.Plug.PutLocale.init(
+        apps: [:cldr, :gettext],
+        cldr: TestBackend.Cldr,
+        default: {Mymodule, :my_function, [:arg1]}
+      )
+
+    assert opts == [
+             session_key: "cldr_locale",
+             default: {Mymodule, :my_function, [:arg1]},
+             gettext: TestGettext.Gettext,
+             cldr: TestBackend.Cldr,
+             param: "locale",
+             from: [:session, :accept_language, :query, :path, :route],
+             apps: [cldr: :global, gettext: :global]
+           ]
   end
 
   test "init allows a default configured as :none" do
-    opts = Cldr.Plug.PutLocale.init(apps: [:cldr, :gettext], cldr: TestBackend.Cldr, default: :none)
+    opts =
+      Cldr.Plug.PutLocale.init(apps: [:cldr, :gettext], cldr: TestBackend.Cldr, default: :none)
+
     assert opts == [
-      session_key: "cldr_locale",
-      default: nil,
-      gettext: TestGettext.Gettext,
-      cldr: TestBackend.Cldr,
-      param: "locale",
-      from: [:session, :accept_language, :query, :path, :route],
-      apps: [cldr: :global, gettext: :global]
-    ]
+             session_key: "cldr_locale",
+             default: nil,
+             gettext: TestGettext.Gettext,
+             cldr: TestBackend.Cldr,
+             param: "locale",
+             from: [:session, :accept_language, :query, :path, :route],
+             apps: [cldr: :global, gettext: :global]
+           ]
   end
 
   test "init allows MFA as a :from option" do
-    opts = Cldr.Plug.PutLocale.init(
-      apps: [:cldr, :gettext],
-      cldr: TestBackend.Cldr,
-      from: [:path, {Mymodule, :my_function, [:arg1]}, :query, {MyModule, :myfunction}],
-      default: :none
-    )
+    opts =
+      Cldr.Plug.PutLocale.init(
+        apps: [:cldr, :gettext],
+        cldr: TestBackend.Cldr,
+        from: [:path, {Mymodule, :my_function, [:arg1]}, :query, {MyModule, :myfunction}],
+        default: :none
+      )
 
     assert opts == [
-      session_key: "cldr_locale",
-      default: nil,
-      gettext: TestGettext.Gettext,
-      cldr: TestBackend.Cldr,
-      param: "locale",
-      apps: [cldr: :global, gettext: :global],
-      from: [:path, {Mymodule, :my_function, [:arg1]}, :query, {MyModule, :myfunction}]
-    ]
+             session_key: "cldr_locale",
+             default: nil,
+             gettext: TestGettext.Gettext,
+             cldr: TestBackend.Cldr,
+             param: "locale",
+             apps: [cldr: :global, gettext: :global],
+             from: [:path, {Mymodule, :my_function, [:arg1]}, :query, {MyModule, :myfunction}]
+           ]
   end
 
   # On older versions of elixir, the capture_io call raises
@@ -173,31 +188,35 @@ defmodule Cldr.Plug.PutLocale.Test do
   end
 
   test "Warning is logged with setting Gettext locale and there is no CLDR gettext module set" do
-    opts = Cldr.Plug.PutLocale.init(
-      from: :query,
-      cldr: WithNoGettextBackend.Cldr,
-      apps: [cldr: :global, gettext: :global]
+    opts =
+      Cldr.Plug.PutLocale.init(
+        from: :query,
+        cldr: WithNoGettextBackend.Cldr,
+        apps: [cldr: :global, gettext: :global]
       )
 
     assert capture_log(fn ->
-      :get
-      |> conn("/?locale=fr")
-      |> Cldr.Plug.PutLocale.call(opts)
-    end) =~ ~r/The CLDR backend WithNoGettextBackend.Cldr has no configured Gettext backend under the :gettext configuration key./
+             :get
+             |> conn("/?locale=fr")
+             |> Cldr.Plug.PutLocale.call(opts)
+           end) =~
+             ~r/The CLDR backend WithNoGettextBackend.Cldr has no configured Gettext backend under the :gettext configuration key./
   end
 
   test "Warning is logged with setting Gettext locale that does not exist" do
-    opts = Cldr.Plug.PutLocale.init(
-      from: :query,
-      cldr: TestBackend.Cldr,
-      apps: [cldr: :global, gettext: :global]
+    opts =
+      Cldr.Plug.PutLocale.init(
+        from: :query,
+        cldr: TestBackend.Cldr,
+        apps: [cldr: :global, gettext: :global]
       )
 
     assert capture_log(fn ->
-      :get
-      |> conn("/?locale=fr")
-      |> Cldr.Plug.PutLocale.call(opts)
-    end) =~ ~r/Locale .* does not have a known Gettext locale.  No Gettext locale has been set./
+             :get
+             |> conn("/?locale=fr")
+             |> Cldr.Plug.PutLocale.call(opts)
+           end) =~
+             ~r/Locale .* does not have a known Gettext locale.  No Gettext locale has been set./
   end
 
   test "bad parameters raise exceptions" do
@@ -470,7 +489,8 @@ defmodule Cldr.Plug.PutLocale.Test do
   end
 
   test "set the locale from an MFA" do
-    opts = Cldr.Plug.PutLocale.init(cldr: TestBackend.Cldr, from: [{MyModule, :get_locale, [:fred]}])
+    opts =
+      Cldr.Plug.PutLocale.init(cldr: TestBackend.Cldr, from: [{MyModule, :get_locale, [:fred]}])
 
     conn =
       :get

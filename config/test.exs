@@ -10,5 +10,5 @@ config :plug,
   validate_header_keys_during_test: true
 
 config :logger,
-  level: :warn,
+  level: :warning,
   truncate: 4096

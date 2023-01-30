@@ -19,8 +19,10 @@ defmodule Cldr.Plug.Test do
 
     assert locale == Cldr.to_string(Cldr.get_locale())
 
-    assert_raise ArgumentError, ~r/Invalid application passed to Cldr.Plug.put_locale_from_session.*/, fn ->
-      Cldr.Plug.put_locale_from_session(session, [:invalid])
-    end
+    assert_raise ArgumentError,
+                 ~r/Invalid application passed to Cldr.Plug.put_locale_from_session.*/,
+                 fn ->
+                   Cldr.Plug.put_locale_from_session(session, [:invalid])
+                 end
   end
 end

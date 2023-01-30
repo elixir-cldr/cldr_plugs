@@ -80,26 +80,28 @@ defmodule Cldr.Plug.PutSession do
             %{as: :string}
           else
             raise ArgumentError,
-              """
-              To save the locale in the session as a string requires
-              that :default_backend be set in the :ex_cldr compile-time configuration.
-              For example, in config.exs:
+                  """
+                  To save the locale in the session as a string requires
+                  that :default_backend be set in the :ex_cldr compile-time configuration.
+                  For example, in config.exs:
 
-              config :ex_cldr,
-                default_backend: MyApp.Cldr
+                  config :ex_cldr,
+                    default_backend: MyApp.Cldr
 
-              """
+                  """
           end
 
         :language_tag ->
           %{as: :language_tag}
 
         other ->
-          raise ArgumentError, "Invalid option for `:as`. Valid settings are :string or :language_tag. Found #{other}}"
+          raise ArgumentError,
+                "Invalid option for `:as`. Valid settings are :string or :language_tag. Found #{other}}"
       end
 
     if length(options) > 0,
-      do: raise ArgumentError, "Invalid options. Valid option is `:as`. Found #{inspect options}"
+      do:
+        raise(ArgumentError, "Invalid options. Valid option is `:as`. Found #{inspect(options)}")
 
     options_map
   end
@@ -124,4 +126,3 @@ defmodule Cldr.Plug.PutSession do
     end
   end
 end
-

@@ -8,7 +8,6 @@ defmodule Cldr.Plug.SetLocale do
   defdelegate session_key, to: Cldr.Plug.PutLocale
   defdelegate private_key, to: Cldr.Plug.PutLocale
   defdelegate get_cldr_locale(conn), to: Cldr.Plug.PutLocale
-
 end
 
 defmodule Cldr.Plug.PutLocale do
@@ -31,7 +30,7 @@ defmodule Cldr.Plug.PutLocale do
       See the apps configuration section.
 
     * `:from` - where in the request to look for the locale.
-      The default is `#{inspect @default_from}`. The valid
+      The default is `#{inspect(@default_from)}`. The valid
       options are:
       * `:accept_language` will parse the `accept-language` header
          and finds the best matched configured locale
@@ -41,7 +40,7 @@ defmodule Cldr.Plug.PutLocale do
       * `:cookie` will look for a locale in the request cookie(s)
       * `:session` will look for a locale in the session
       * `:route` will look for a locale in the route that was
-        matched under the key `private.#{inspect @private_key}`.
+        matched under the key `private.#{inspect(@private_key)}`.
         The key may be populated by a Phoenix router and it is used
         extensively by the [ex_cldr_routes](https://hex.pm/packages/ex_cldr_routes)
         library. Note that any locale set in the route represents
@@ -201,7 +200,17 @@ defmodule Cldr.Plug.PutLocale do
   require Logger
   alias Cldr.AcceptLanguage
 
-  @from_options [:accept_language, :path, :body, :query, :session, :cookie, :host, :assigns, :route]
+  @from_options [
+    :accept_language,
+    :path,
+    :body,
+    :query,
+    :session,
+    :cookie,
+    :host,
+    :assigns,
+    :route
+  ]
   @app_options [:cldr, :gettext]
 
   @language_header "accept-language"
@@ -380,12 +389,12 @@ defmodule Cldr.Plug.PutLocale do
 
   defp put_locale({:gettext, _}, %Cldr.LanguageTag{gettext_locale_name: nil} = locale, _options) do
     if is_nil(locale.backend.__cldr__(:gettext)) do
-      Logger.warn(
-        "The CLDR backend #{inspect locale.backend} has no configured Gettext backend " <>
-        "under the :gettext configuration key. Gettext locale #{inspect(locale.requested_locale_name)} cannot be set."
+      Logger.warning(
+        "The CLDR backend #{inspect(locale.backend)} has no configured Gettext backend " <>
+          "under the :gettext configuration key. Gettext locale #{inspect(locale.requested_locale_name)} cannot be set."
       )
     else
-      Logger.warn(
+      Logger.warning(
         "Locale #{inspect(locale.requested_locale_name)} does not have a known " <>
           "Gettext locale.  No Gettext locale has been set."
       )
@@ -512,7 +521,7 @@ defmodule Cldr.Plug.PutLocale do
   end
 
   defp invalid_from?(:assigns) do
-    IO.warn "The :from option `:assigns` is deprecated and should be replaced with `:route`", []
+    IO.warn("The :from option `:assigns` is deprecated and should be replaced with `:route`", [])
     false
   end
 
@@ -521,12 +530,12 @@ defmodule Cldr.Plug.PutLocale do
   end
 
   defp invalid_from?({module, function, args})
-      when is_atom(module) and is_atom(function) and is_list(args) do
+       when is_atom(module) and is_atom(function) and is_list(args) do
     false
   end
 
   defp invalid_from?({module, function})
-      when is_atom(module) and is_atom(function) do
+       when is_atom(module) and is_atom(function) do
     false
   end
 
@@ -558,12 +567,12 @@ defmodule Cldr.Plug.PutLocale do
   end
 
   defp validate_default(options, {module, function, args})
-      when is_atom(module) and is_atom(function) and is_list(args) do
+       when is_atom(module) and is_atom(function) and is_list(args) do
     Keyword.put(options, :default, {module, function, args})
   end
 
   defp validate_default(options, {module, function})
-      when is_atom(module) and is_atom(function) do
+       when is_atom(module) and is_atom(function) do
     Keyword.put(options, :default, {module, function, []})
   end
 
@@ -602,7 +611,7 @@ defmodule Cldr.Plug.PutLocale do
   defp validate_session_key(options, session_key) when is_binary(session_key) do
     IO.warn(
       "The :session_key option is deprecated and will be removed in " <>
-        "a future release. The session key is being standardised as #{inspect @session_key}",
+        "a future release. The session key is being standardised as #{inspect(@session_key)}",
       []
     )
 
@@ -630,4 +639,3 @@ defmodule Cldr.Plug.PutLocale do
     end
   end
 end
-
