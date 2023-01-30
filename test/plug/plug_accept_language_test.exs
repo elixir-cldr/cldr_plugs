@@ -108,7 +108,7 @@ defmodule Cldr.Plug.AcceptLanguage.Test do
              |> conn("/")
              |> put_req_header("accept-language", "xx")
              |> Cldr.Plug.AcceptLanguage.call(opts)
-           end) == ""
+           end) =~ ~r/Cldr.InvalidLanguageError: The language./
   end
 
   test "Log level configured for no-match warnings below logger configured level" do
@@ -120,6 +120,6 @@ defmodule Cldr.Plug.AcceptLanguage.Test do
              |> conn("/")
              |> put_req_header("accept-language", "xx")
              |> Cldr.Plug.AcceptLanguage.call(opts)
-           end) == ""
+           end) =~ ~r/Cldr.InvalidLanguageError: The language./
   end
 end

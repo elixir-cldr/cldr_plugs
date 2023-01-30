@@ -12,5 +12,7 @@ end
 # Test with no Gettext
 defmodule WithNoGettextBackend.Cldr do
   use Cldr,
+    locales: ["en", "fr"],
+    precompile_transliterations: [{:latn, :arab}, {:arab, :thai}, {:arab, :latn}],
     providers: []
 end

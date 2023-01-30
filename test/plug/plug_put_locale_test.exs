@@ -3,6 +3,7 @@ defmodule Cldr.Plug.PutLocale.Test do
   use Plug.Test
 
   import ExUnit.CaptureIO
+  import ExUnit.CaptureLog
 
   import Plug.Conn,
     only: [
@@ -171,6 +172,34 @@ defmodule Cldr.Plug.PutLocale.Test do
            ]
   end
 
+  test "Warning is logged with setting Gettext locale and there is no CLDR gettext module set" do
+    opts = Cldr.Plug.PutLocale.init(
+      from: :query,
+      cldr: WithNoGettextBackend.Cldr,
+      apps: [cldr: :global, gettext: :global]
+      )
+
+    assert capture_log(fn ->
+      :get
+      |> conn("/?locale=fr")
+      |> Cldr.Plug.PutLocale.call(opts)
+    end) =~ ~r/The CLDR backend WithNoGettextBackend.Cldr has no configured Gettext backend under the :gettext configuration key./
+  end
+
+  test "Warning is logged with setting Gettext locale that does not exist" do
+    opts = Cldr.Plug.PutLocale.init(
+      from: :query,
+      cldr: TestBackend.Cldr,
+      apps: [cldr: :global, gettext: :global]
+      )
+
+    assert capture_log(fn ->
+      :get
+      |> conn("/?locale=fr")
+      |> Cldr.Plug.PutLocale.call(opts)
+    end) =~ ~r/Locale .* does not have a known Gettext locale.  No Gettext locale has been set./
+  end
+
   test "bad parameters raise exceptions" do
     assert_raise ArgumentError, fn ->
       Cldr.Plug.PutLocale.init(from: :nothing, cldr: TestBackend.Cldr)
@@ -237,60 +266,64 @@ defmodule Cldr.Plug.PutLocale.Test do
   test "set the locale from the host" do
     opts = Cldr.Plug.PutLocale.init(from: :host, cldr: TestBackend.Cldr)
 
-    conn =
-      :get
-      |> conn("/")
-      |> Map.put(:host, "www.site.fr")
-      |> Cldr.Plug.PutLocale.call(opts)
+    capture_log(fn ->
+      conn =
+        :get
+        |> conn("/")
+        |> Map.put(:host, "www.site.fr")
+        |> Cldr.Plug.PutLocale.call(opts)
 
-    assert conn.private[:cldr_locale] ==
-             %Cldr.LanguageTag{
-               backend: TestBackend.Cldr,
-               canonical_locale_name: "fr-FR",
-               cldr_locale_name: :fr,
-               extensions: %{},
-               gettext_locale_name: nil,
-               language: "fr",
-               locale: %{},
-               private_use: [],
-               rbnf_locale_name: :fr,
-               requested_locale_name: "fr-FR",
-               script: :Latn,
-               territory: :FR,
-               transform: %{},
-               language_variants: []
-             }
+      assert conn.private[:cldr_locale] ==
+               %Cldr.LanguageTag{
+                 backend: TestBackend.Cldr,
+                 canonical_locale_name: "fr-FR",
+                 cldr_locale_name: :fr,
+                 extensions: %{},
+                 gettext_locale_name: nil,
+                 language: "fr",
+                 locale: %{},
+                 private_use: [],
+                 rbnf_locale_name: :fr,
+                 requested_locale_name: "fr-FR",
+                 script: :Latn,
+                 territory: :FR,
+                 transform: %{},
+                 language_variants: []
+               }
 
-    assert Cldr.get_locale() == conn.private[:cldr_locale]
+      assert Cldr.get_locale() == conn.private[:cldr_locale]
+    end)
   end
 
   test "set the locale from assigns" do
     opts = Cldr.Plug.PutLocale.init(from: :route, cldr: TestBackend.Cldr)
 
-    conn =
-      :get
-      |> conn("/hello")
-      |> MyRouter.call(opts)
+    capture_log(fn ->
+      conn =
+        :get
+        |> conn("/hello")
+        |> MyRouter.call(opts)
 
-    assert conn.private[:cldr_locale] ==
-             %Cldr.LanguageTag{
-               backend: TestBackend.Cldr,
-               canonical_locale_name: "fr-FR",
-               cldr_locale_name: :fr,
-               extensions: %{},
-               gettext_locale_name: nil,
-               language: "fr",
-               locale: %{},
-               private_use: [],
-               rbnf_locale_name: :fr,
-               requested_locale_name: "fr-FR",
-               script: :Latn,
-               territory: :FR,
-               transform: %{},
-               language_variants: []
-             }
+      assert conn.private[:cldr_locale] ==
+               %Cldr.LanguageTag{
+                 backend: TestBackend.Cldr,
+                 canonical_locale_name: "fr-FR",
+                 cldr_locale_name: :fr,
+                 extensions: %{},
+                 gettext_locale_name: nil,
+                 language: "fr",
+                 locale: %{},
+                 private_use: [],
+                 rbnf_locale_name: :fr,
+                 requested_locale_name: "fr-FR",
+                 script: :Latn,
+                 territory: :FR,
+                 transform: %{},
+                 language_variants: []
+               }
 
-    assert Cldr.get_locale() == conn.private[:cldr_locale]
+      assert Cldr.get_locale() == conn.private[:cldr_locale]
+    end)
   end
 
   test "set the locale from the session using a locale name" do

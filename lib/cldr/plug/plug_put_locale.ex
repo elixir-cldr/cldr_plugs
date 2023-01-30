@@ -379,10 +379,17 @@ defmodule Cldr.Plug.PutLocale do
   end
 
   defp put_locale({:gettext, _}, %Cldr.LanguageTag{gettext_locale_name: nil} = locale, _options) do
-    Logger.warn(
-      "Locale #{inspect(locale.requested_locale_name)} does not have a known " <>
-        "Gettext locale.  No Gettext locale has been set."
-    )
+    if is_nil(locale.backend.__cldr__(:gettext)) do
+      Logger.warn(
+        "The CLDR backend #{inspect locale.backend} has no configured Gettext backend " <>
+        "under the :gettext configuration key. Gettext locale #{inspect(locale.requested_locale_name)} cannot be set."
+      )
+    else
+      Logger.warn(
+        "Locale #{inspect(locale.requested_locale_name)} does not have a known " <>
+          "Gettext locale.  No Gettext locale has been set."
+      )
+    end
 
     nil
   end
