@@ -1,7 +1,7 @@
 defmodule Cldr.Plug.MixProject do
   use Mix.Project
 
-  @version "1.2.1"
+  @version "1.3.0"
 
   def project do
     [
@@ -75,7 +75,7 @@ defmodule Cldr.Plug.MixProject do
 
   defp deps do
     [
-      {:ex_cldr, "~> 2.29"},
+      {:ex_cldr, "~> 2.37"},
       {:ex_doc, "~> 0.18", only: [:dev, :test, :release], runtime: false},
       {:gettext, "~> 0.19", optional: true},
       {:jason, "~> 1.0", optional: true},

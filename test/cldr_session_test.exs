@@ -11,7 +11,7 @@ defmodule Cldr.Plug.Test do
     session = get_session(conn)
     locale = get_session(conn, Cldr.Plug.SetLocale.session_key())
 
-    assert locale == "es-Latn-ES"
+    assert locale == "es-ES"
 
     assert {:ok, _locale} = Cldr.Plug.put_locale_from_session(session)
     assert {:ok, _locale} = Cldr.Plug.put_locale_from_session(session, [:cldr])

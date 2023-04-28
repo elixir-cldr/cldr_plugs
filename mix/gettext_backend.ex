@@ -1,3 +1,4 @@
+require MyApp.Gettext.Plural
 Application.ensure_all_started(:gettext)
 
 defmodule MyApp.Gettext do

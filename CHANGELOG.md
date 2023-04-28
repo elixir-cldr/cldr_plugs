@@ -1,5 +1,13 @@
 # Changelog
 
+## Cldr Plugs v1.3.0
+
+This is the changelog for Cldr Plugs v1.3.0 released on April 28th, 2023.  For older changelogs please consult the release tag on [GitHub](https://github.com/elixir-cldr/cldr_plugs/tags)
+
+### Enhancements
+
+* Updates to [ex_cldr version 2.37.0](https://hex.pm/packages/ex_cldr/2.37.0) which includes data from [CLDR release 43](https://cldr.unicode.org/index/downloads/cldr-43)
+
 ## Cldr Plugs v1.2.1
 
 This is the changelog for Cldr Plugs v1.2.1 released on January 30th, 2023.  For older changelogs please consult the release tag on [GitHub](https://github.com/elixir-cldr/cldr_plugs/tags)
