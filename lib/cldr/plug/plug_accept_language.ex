@@ -13,7 +13,7 @@ defmodule Cldr.Plug.AcceptLanguage do
 
   * `:no_match_log_level` determines the logging level for
     the case when no matching locale is configured to meet the users
-    request. The default is `:warn`. If set to `nil` then no logging
+    request. The default is `:warning`. If set to `nil` then no logging
     is performed.
 
   ## Example
@@ -33,7 +33,7 @@ defmodule Cldr.Plug.AcceptLanguage do
   require Logger
 
   @language_header "accept-language"
-  @default_log_level :warn
+  @default_log_level :warning
 
   @doc false
   def init(options \\ []) do
