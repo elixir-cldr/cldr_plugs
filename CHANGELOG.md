@@ -1,5 +1,15 @@
 # Changelog
 
+## Cldr Plugs v1.3.1
+
+This is the changelog for Cldr Plugs v1.3.1 released on October 28th, 2023.  For older changelogs please consult the release tag on [GitHub](https://github.com/elixir-cldr/cldr_plugs/tags)
+
+**Note that this release increases the minimum Elixir version to 1.11.**
+
+### Bug Fixes
+
+* Fix default log level to be `:warning`, not `:warn`. Thanks to @philipgiuliani for the PR. Closes #9.
+
 ## Cldr Plugs v1.3.0
 
 This is the changelog for Cldr Plugs v1.3.0 released on April 28th, 2023.  For older changelogs please consult the release tag on [GitHub](https://github.com/elixir-cldr/cldr_plugs/tags)

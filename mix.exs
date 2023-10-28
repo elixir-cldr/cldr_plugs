@@ -1,13 +1,13 @@
 defmodule Cldr.Plug.MixProject do
   use Mix.Project
 
-  @version "1.3.0"
+  @version "1.3.1"
 
   def project do
     [
       app: :ex_cldr_plugs,
       version: @version,
-      elixir: "~> 1.10",
+      elixir: "~> 1.11",
       compilers: Mix.compilers(),
       elixirc_paths: elixirc_paths(Mix.env()),
       name: "Cldr Plug",
