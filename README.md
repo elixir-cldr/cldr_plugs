@@ -1,5 +1,18 @@
 # Cldr Plug
 
+## Installation
+
+The package can be installed by adding `ex_cldr_plugs` to your list of dependencies in `mix.exs`:
+
+```elixir
+def deps do
+  [
+    {:ex_cldr_plugs, "~> 1.3"},
+  ]
+end
+```
+Documentation can be found at [https://hexdocs.pm/ex_cldr_plugs](https://hexdocs.pm/ex_cldr_plugs).
+
 ## Plugs
 
 `Cldr` provides two plugs to aid integration into an HTTP workflow.  These two plugs are:
