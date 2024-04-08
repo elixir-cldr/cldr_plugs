@@ -1,10 +1,18 @@
 # Changelog
 
+**Elixir version 1.11 or greater is required from ex_cldr_plugs version 1.3.1**
+
+## Cldr Plugs v1.3.2
+
+This is the changelog for Cldr Plugs v1.3.2 released on April 9th, 2024.  For older changelogs please consult the release tag on [GitHub](https://github.com/elixir-cldr/cldr_plugs/tags)
+
+### Bug Fixes
+
+* Fix spec for `put_locale_from_session/2`. Thanks to @woylie for the PR. Closes #4.
+
 ## Cldr Plugs v1.3.1
 
 This is the changelog for Cldr Plugs v1.3.1 released on October 28th, 2023.  For older changelogs please consult the release tag on [GitHub](https://github.com/elixir-cldr/cldr_plugs/tags)
-
-**Note that this release increases the minimum Elixir version to 1.11.**
 
 ### Bug Fixes
 
