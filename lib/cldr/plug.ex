@@ -46,7 +46,7 @@ defmodule Cldr.Plug do
       end
 
   """
-  @spec put_locale_from_session(Cldr.LanguageTag.t(), applications) ::
+  @spec put_locale_from_session(map, applications) ::
           {:ok, Cldr.LanguageTag.t()} | {:error, {module(), String.t()}}
 
   def put_locale_from_session(locale, applications \\ [:cldr, :gettext])
