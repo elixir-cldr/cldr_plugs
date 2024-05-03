@@ -2,6 +2,14 @@
 
 **Elixir version 1.11 or greater is required from ex_cldr_plugs version 1.3.1**
 
+## Cldr Plugs v1.3.3
+
+This is the changelog for Cldr Plugs v1.3.3 released on May 3rd, 2024.  For older changelogs please consult the release tag on [GitHub](https://github.com/elixir-cldr/cldr_plugs/tags)
+
+### Bug Fixes
+
+* Add `config/prod.exs` so `MIX_ENV=prod` compilation succeeds. Thanks to @camelpunch for the report. Closes #12.
+
 ## Cldr Plugs v1.3.2
 
 This is the changelog for Cldr Plugs v1.3.2 released on April 9th, 2024.  For older changelogs please consult the release tag on [GitHub](https://github.com/elixir-cldr/cldr_plugs/tags)
