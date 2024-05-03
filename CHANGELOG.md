@@ -8,7 +8,7 @@ This is the changelog for Cldr Plugs v1.3.3 released on May 3rd, 2024.  For olde
 
 ### Bug Fixes
 
-* Add `config/prod.exs` so `MIX_ENV=prod` compilation succeeds. Thanks to @camelpunch for the report. Closes #12.
+* Add `config/prod.exs` so `MIX_ENV=prod` compilation succeeds. Thanks to @camelpunch for the PR. Closes #12.
 
 ## Cldr Plugs v1.3.2
 
