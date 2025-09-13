@@ -16,7 +16,7 @@ end
 
 defmodule Cldr.Plug.Router.Test do
   use ExUnit.Case
-  use Plug.Test
+  import Plug.Test
 
   test "set the locale from the path params" do
     opts = Cldr.TestApp.Router.init([])

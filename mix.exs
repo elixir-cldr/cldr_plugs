@@ -1,13 +1,13 @@
 defmodule Cldr.Plug.MixProject do
   use Mix.Project
 
-  @version "1.3.3"
+  @version "1.3.4"
 
   def project do
     [
       app: :ex_cldr_plugs,
       version: @version,
-      elixir: "~> 1.11",
+      elixir: "~> 1.12",
       compilers: Mix.compilers(),
       elixirc_paths: elixirc_paths(Mix.env()),
       name: "Cldr Plug",
@@ -77,7 +77,7 @@ defmodule Cldr.Plug.MixProject do
     [
       {:ex_cldr, "~> 2.37"},
       {:ex_doc, "~> 0.18", only: [:dev, :test, :release], runtime: false},
-      {:gettext, "~> 0.19", optional: true},
+      {:gettext, "~> 0.19 or ~> 1.0", optional: true},
       {:jason, "~> 1.0", optional: true},
       {:plug, "~> 1.9"},
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false}

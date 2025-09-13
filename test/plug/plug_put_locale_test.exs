@@ -1,6 +1,6 @@
 defmodule Cldr.Plug.PutLocale.Test do
   use ExUnit.Case, async: true
-  use Plug.Test
+  import Plug.Test
 
   import ExUnit.CaptureIO
   import ExUnit.CaptureLog

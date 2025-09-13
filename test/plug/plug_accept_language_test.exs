@@ -1,6 +1,6 @@
 defmodule Cldr.Plug.AcceptLanguage.Test do
   use ExUnit.Case, async: true
-  use Plug.Test
+  import Plug.Test
 
   import ExUnit.CaptureLog
   import Plug.Conn, only: [put_req_header: 3]

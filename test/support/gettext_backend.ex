@@ -3,7 +3,7 @@ defmodule TestGettext.Gettext do
   Implements a Gettext-compatible module but using Cldr locales.  Its for
   testing only.
   """
-  use Gettext,
+  use Gettext.Backend,
     otp_app: :ex_cldr_plugs,
     priv: "priv/gettext_test"
 end
