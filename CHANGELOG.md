@@ -2,6 +2,14 @@
 
 **Elixir version 1.11 or greater is required from ex_cldr_plugs version 1.3.1**
 
+## Cldr Plugs v1.4.0
+
+This is the changelog for Cldr Plugs v1.4.0 released on June 25th, 2026.  For older changelogs please consult the release tag on [GitHub](https://github.com/elixir-cldr/cldr_plugs/tags)
+
+### Enhancements
+
+* Avoid calling put_session/3 when a locale present and matches the locale in the session. Thanks to @maltoe for the PR. Closes #14.
+
 ## Cldr Plugs v1.3.4
 
 This is the changelog for Cldr Plugs v1.3.4 released on September 14th, 2025.  For older changelogs please consult the release tag on [GitHub](https://github.com/elixir-cldr/cldr_plugs/tags)
