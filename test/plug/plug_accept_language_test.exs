@@ -42,7 +42,10 @@ defmodule Cldr.Plug.AcceptLanguage.Test do
       |> put_req_header("accept-language", "en-AU")
       |> Cldr.Plug.AcceptLanguage.call(opts)
 
-    assert conn.private[:cldr_locale].gettext_locale_name == "en"
+    # ex_cldr resolves the closest known Gettext locale via CLDR language
+    # matching. "en-AU" matches the "en_GB" Gettext locale (both are non-US
+    # English) in preference to the more distant "en".
+    assert conn.private[:cldr_locale].gettext_locale_name == "en_GB"
   end
 
   test "that the gettext locale is a set" do
@@ -92,12 +95,17 @@ defmodule Cldr.Plug.AcceptLanguage.Test do
     opts =
       Cldr.Plug.AcceptLanguage.init(cldr_backend: TestBackend.Cldr, no_match_log_level: :error)
 
+    # "za" (Zhuang) is a valid language subtag with no CLDR locale, so it
+    # parses successfully but matches no configured locale, yielding
+    # Cldr.NoMatchingLocale. (A subtag with any CLDR locale, e.g. "ab", now
+    # matches under ex_cldr's language-matching algorithm and is no longer a
+    # no-match.)
     assert capture_log(fn ->
              :get
              |> conn("/")
-             |> put_req_header("accept-language", "ab")
+             |> put_req_header("accept-language", "za")
              |> Cldr.Plug.AcceptLanguage.call(opts)
-           end) =~ "Cldr.NoMatchingLocale: No configured locale could be matched to \"ab\""
+           end) =~ "Cldr.NoMatchingLocale: No configured locale could be matched to \"za\""
   end
 
   test "Log level not configured for no-match warnings" do

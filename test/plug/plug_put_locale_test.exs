@@ -17,6 +17,9 @@ defmodule Cldr.Plug.PutLocale.Test do
   test "init returns the default options" do
     opts = Cldr.Plug.PutLocale.init(cldr: TestBackend.Cldr)
 
+    # The default mirrors TestBackend.Cldr.default_locale() ("en-001"), whose
+    # gettext_locale_name resolves to "en_GB" via ex_cldr's CLDR language
+    # matching against the known Gettext locales.
     assert opts == [
              session_key: "cldr_locale",
              default: %Cldr.LanguageTag{
@@ -24,7 +27,7 @@ defmodule Cldr.Plug.PutLocale.Test do
                canonical_locale_name: "en-001",
                cldr_locale_name: :"en-001",
                extensions: %{},
-               gettext_locale_name: "en",
+               gettext_locale_name: "en_GB",
                language: "en",
                language_subtags: [],
                language_variants: [],
@@ -46,6 +49,8 @@ defmodule Cldr.Plug.PutLocale.Test do
   test "init sets the gettext locale if not is defined, and its in :apps and cldr has one" do
     opts = Cldr.Plug.PutLocale.init(apps: [:cldr, :gettext], cldr: TestBackend.Cldr)
 
+    # As above, the default "en-001" resolves its gettext_locale_name to
+    # "en_GB" via ex_cldr's CLDR language matching.
     assert opts == [
              session_key: "cldr_locale",
              default: %Cldr.LanguageTag{
@@ -53,7 +58,7 @@ defmodule Cldr.Plug.PutLocale.Test do
                canonical_locale_name: "en-001",
                cldr_locale_name: :"en-001",
                extensions: %{},
-               gettext_locale_name: "en",
+               gettext_locale_name: "en_GB",
                language: "en",
                language_subtags: [],
                language_variants: [],
@@ -456,7 +461,10 @@ defmodule Cldr.Plug.PutLocale.Test do
       |> put_req_header("accept-language", "en-AU")
       |> Cldr.Plug.PutLocale.call(opts)
 
-    assert conn.private[:cldr_locale].gettext_locale_name == "en"
+    # ex_cldr resolves "en-AU" to the closest known Gettext locale, "en_GB",
+    # via CLDR language matching (both are non-US English), in preference to
+    # the more distant "en".
+    assert conn.private[:cldr_locale].gettext_locale_name == "en_GB"
   end
 
   test "set the locale from an MF" do
