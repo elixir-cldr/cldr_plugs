@@ -119,7 +119,11 @@ defmodule Cldr.Plug.PutSession do
             cldr_locale
           end
 
-        put_session(conn, PutLocale.session_key(), locale)
+        if get_session(conn, PutLocale.session_key()) != locale do
+          put_session(conn, PutLocale.session_key(), locale)
+        else
+          conn
+        end
 
       _other ->
         conn
