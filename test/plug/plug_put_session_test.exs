@@ -11,6 +11,18 @@ defmodule Cldr.Plug.SetSession.Test do
     assert get_session(conn, Cldr.Plug.SetLocale.session_key()) |> to_string() == "es-ES"
   end
 
+  test "that the session is not written to needlessly" do
+    conn = conn(:get, "/hello/es", %{this: "thing"})
+    conn = MyRouter.call(conn, MyRouter.init([]))
+
+    conn = recycle_cookies(conn(:get, "/hello/es", %{this: "thing"}), conn)
+    conn = MyRouter.call(conn, MyRouter.init([]))
+
+    assert conn.resp_cookies == %{}
+
+    assert get_session(conn, Cldr.Plug.SetLocale.session_key()) |> to_string() == "es-ES"
+  end
+
   test "that the session is set for complex locale (not a cldr locale name)" do
     locale = "es-u-ca-coptic"
 
